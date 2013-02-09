@@ -11,7 +11,7 @@ public class ConfigLoaderTest {
 	public void testLoader1() {
 		
 		ConfigLoader loader = new ConfigLoader();
-		loader.setConfigFileName("META-INF/sea-surf-test-config-1.xml");
+		loader.setConfigFileName("sample-config.xml");
 		
 		SeaSurfConfig config = loader.loadConfig();
 		Assert.assertNotNull(config);
