@@ -1,33 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sea-surf-config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.nerdammer.it/sea-surf-config_1_0" xsi:schemaLocation="http://www.nerdammer.it/sea-surf-config_1_0 /Users/nicolaferraro/Workspaces/CSRF/sea-surf/src/main/resources/META-INF/sea-surf-config_1_0.xsd">
-	<security-token>
-		<scope>SESSION</scope>
-		<include>
-		<request-type>
-			<pattern>/*</pattern>
-			<methods>
-				<method>POST</method>
-			</methods>
-		</request-type>
-		</include>
-		
-		<exclude>
-			<request-type>
-				<pattern>/DataImport*</pattern>
-			</request-type>
-		</exclude>
-	</security-token>
-	
 	<referer-constraints>
 		<include-origin>
-			<page>ss</page>
-			<domain></domain>
-			<page>ssww</page>
+			<page>http://www.google.*</page>
+			<page>https://www.google.*</page>
 		</include-origin>
 		
 		<include>
 			<request-type>
-				<pattern>/as</pattern>
+				<pattern>/action</pattern>
 			</request-type>
 		</include>
 	</referer-constraints>
