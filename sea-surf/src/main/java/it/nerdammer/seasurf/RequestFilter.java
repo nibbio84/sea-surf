@@ -1,11 +1,13 @@
 package it.nerdammer.seasurf;
 
+import it.nerdammer.seasurf.config.RefererConstraint;
 import it.nerdammer.seasurf.config.RefererConstraints;
 import it.nerdammer.seasurf.config.RequestOrigin;
 import it.nerdammer.seasurf.config.RequestTypeCollection;
 import it.nerdammer.seasurf.config.SeaSurfConfig;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -35,20 +37,24 @@ public class RequestFilter implements Filter {
 		// Referer security
 		RefererConstraints refConstraints = config.getRefererConstraints();
 		if(refConstraints!=null) {
-			RequestTypeCollection include = refConstraints.getInclude();
-			RequestTypeCollection exclude = refConstraints.getExclude();
-			boolean matches = MatchingUtils.resourceMatches(httpReq, include, exclude);
-			
-			if(matches) {
-				RequestOrigin includeOrigin = refConstraints.getIncludeOrigin();
-				RequestOrigin excludeOrigin = refConstraints.getExcludeOrigin();
-				boolean matchesOrigin = MatchingUtils.originMatches(httpReq, includeOrigin, excludeOrigin);
+			List<RefererConstraint> constrs = refConstraints.getRefererConstraint();
+			for(RefererConstraint con : constrs) {
+				RequestTypeCollection include = con.getInclude();
+				RequestTypeCollection exclude = con.getExclude();
+				boolean matches = MatchingUtils.resourceMatches(httpReq, include, exclude);
 				
-				if(!matchesOrigin) {
-					block(httpReq, httpResp, "Request origin not allowed for the requested page");
-					return;
+				if(matches) {
+					RequestOrigin includeOrigin = con.getIncludeOrigin();
+					RequestOrigin excludeOrigin = con.getExcludeOrigin();
+					boolean matchesOrigin = MatchingUtils.originMatches(httpReq, includeOrigin, excludeOrigin);
+					
+					if(!matchesOrigin) {
+						block(httpReq, httpResp, "Request origin not allowed for the requested page");
+						return;
+					}
 				}
 			}
+			
 		}
 		
 		

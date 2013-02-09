@@ -10,28 +10,23 @@ package it.nerdammer.seasurf.config;
 
 import java.util.ArrayList;
 import java.util.List;
-import javax.xml.bind.JAXBElement;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElementRef;
-import javax.xml.bind.annotation.XmlElementRefs;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for request-origin complex type.
+ * <p>Java class for security-token-constraints complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="request-origin">
+ * &lt;complexType name="security-token-constraints">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;choice maxOccurs="unbounded">
- *           &lt;element name="page" type="{http://www.nerdammer.it/sea-surf-config_1_0}origin-page"/>
- *           &lt;element name="domain" type="{http://www.nerdammer.it/sea-surf-config_1_0}origin-domain"/>
- *         &lt;/choice>
+ *         &lt;element name="security-token-constraint" type="{http://www.nerdammer.it/sea-surf-config_1_0}security-token-constraint" maxOccurs="unbounded"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -41,45 +36,41 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "request-origin", propOrder = {
-    "pageOrDomain"
+@XmlType(name = "security-token-constraints", propOrder = {
+    "securityTokenConstraint"
 })
-public class RequestOrigin {
+public class SecurityTokenConstraints {
 
-    @XmlElementRefs({
-        @XmlElementRef(name = "page", namespace = "http://www.nerdammer.it/sea-surf-config_1_0", type = JAXBElement.class),
-        @XmlElementRef(name = "domain", namespace = "http://www.nerdammer.it/sea-surf-config_1_0", type = JAXBElement.class)
-    })
-    protected List<JAXBElement<String>> pageOrDomain;
+    @XmlElement(name = "security-token-constraint", required = true)
+    protected List<SecurityTokenConstraint> securityTokenConstraint;
 
     /**
-     * Gets the value of the pageOrDomain property.
+     * Gets the value of the securityTokenConstraint property.
      * 
      * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the pageOrDomain property.
+     * This is why there is not a <CODE>set</CODE> method for the securityTokenConstraint property.
      * 
      * <p>
      * For example, to add a new item, do as follows:
      * <pre>
-     *    getPageOrDomain().add(newItem);
+     *    getSecurityTokenConstraint().add(newItem);
      * </pre>
      * 
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link JAXBElement }{@code <}{@link String }{@code >}
-     * {@link JAXBElement }{@code <}{@link String }{@code >}
+     * {@link SecurityTokenConstraint }
      * 
      * 
      */
-    public List<JAXBElement<String>> getPageOrDomain() {
-        if (pageOrDomain == null) {
-            pageOrDomain = new ArrayList<JAXBElement<String>>();
+    public List<SecurityTokenConstraint> getSecurityTokenConstraint() {
+        if (securityTokenConstraint == null) {
+            securityTokenConstraint = new ArrayList<SecurityTokenConstraint>();
         }
-        return this.pageOrDomain;
+        return this.securityTokenConstraint;
     }
 
 }

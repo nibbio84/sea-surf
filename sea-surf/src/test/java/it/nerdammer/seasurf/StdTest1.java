@@ -92,4 +92,127 @@ public class StdTest1 extends StdBaseTest {
 		
 	}
 	
+	@Test
+	public void test3() {
+		
+		RequestFilter filter = init("std-test-1.xml");
+		
+		HttpServletRequest req = new HttpServletRequestMock() {
+			@Override
+			public String getMethod() {
+				return "post";
+			}
+			@Override
+			public String getRequestURI() {
+				return "/basepath/azionista";
+			}
+			@Override
+			public String getContextPath() {
+				return "/basepath";
+			}
+			@Override
+			public String getHeader(String header) {
+				if(header.equals("Referer")) {
+					return "https://www.nerdammer.it";
+				}
+				throw new IllegalArgumentException();
+			}
+		};
+		
+		HttpServletResponse res = new HttpServletResponseMock();
+		
+		try {
+			filter.doFilter(req, res, getTestChain());
+		} catch(BlockDetectionException e) {
+			throw e;
+		} catch(ForwardDetectionException e) {
+			// ok
+		} catch(Exception e) {
+			throw new RuntimeException(e);
+		}
+		
+	}
+	
+	@Test
+	public void test4() {
+		
+		RequestFilter filter = init("std-test-1.xml");
+		
+		HttpServletRequest req = new HttpServletRequestMock() {
+			@Override
+			public String getMethod() {
+				return "post";
+			}
+			@Override
+			public String getRequestURI() {
+				return "/basepath/azionista";
+			}
+			@Override
+			public String getContextPath() {
+				return "/basepath";
+			}
+			@Override
+			public String getHeader(String header) {
+				if(header.equals("Referer")) {
+					return "https://www.google.it";
+				}
+				throw new IllegalArgumentException();
+			}
+		};
+		
+		HttpServletResponse res = new HttpServletResponseMock();
+		
+		try {
+			filter.doFilter(req, res, getTestChain());
+		} catch(BlockDetectionException e) {
+			// ok
+		} catch(ForwardDetectionException e) {
+			throw e;
+		} catch(Exception e) {
+			throw new RuntimeException(e);
+		}
+		
+	}
+	
+	@Test
+	public void test5() {
+		
+		RequestFilter filter = init("std-test-1.xml");
+		
+		HttpServletRequest req = new HttpServletRequestMock() {
+			@Override
+			public String getMethod() {
+				return "get";
+			}
+			@Override
+			public String getRequestURI() {
+				return "/basepath/azionista";
+			}
+			@Override
+			public String getContextPath() {
+				return "/basepath";
+			}
+			@Override
+			public String getHeader(String header) {
+				if(header.equals("Referer")) {
+					return "https://www.google.it";
+				}
+				throw new IllegalArgumentException();
+			}
+		};
+		
+		HttpServletResponse res = new HttpServletResponseMock();
+		
+		try {
+			filter.doFilter(req, res, getTestChain());
+		} catch(BlockDetectionException e) {
+			throw e;
+		} catch(ForwardDetectionException e) {
+			// ok
+		} catch(Exception e) {
+			throw new RuntimeException(e);
+		}
+		
+	}
+	
 }
