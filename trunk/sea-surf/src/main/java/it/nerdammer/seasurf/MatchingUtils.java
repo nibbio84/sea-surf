@@ -26,6 +26,9 @@ public class MatchingUtils {
 	}
 	
 	public static boolean originMatches(HttpServletRequest request, RequestOrigin origin) {
+		if(origin==null) {
+			return false;
+		}
 		List<JAXBElement<String>> pageOrDomains = origin.getPageOrDomain();
 		for(JAXBElement<String> pageOrDomain : pageOrDomains) {
 			String type = pageOrDomain.getName().getLocalPart();

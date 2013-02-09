@@ -46,7 +46,7 @@
     </complexType>
 
 
-    <complexType name="security-token">
+    <complexType name="security-token-constraint">
     	<sequence>
     		<element name="scope" maxOccurs="1" minOccurs="1">
     			<simpleType>
@@ -65,14 +65,14 @@
 
     <complexType name="sea-surf-config">
     	<sequence>
-    		<element name="security-token"
-    			type="tns:security-token" maxOccurs="1" minOccurs="0">
+    		<element name="security-token-constraints"
+    			type="tns:security-token-constraints" maxOccurs="1" minOccurs="0">
     		</element>
     		<element name="referer-constraints" type="tns:referer-constraints" maxOccurs="1" minOccurs="0"></element>
     	</sequence>
     </complexType>
 
-    <complexType name="referer-constraints">
+    <complexType name="referer-constraint">
     	<sequence>
     		<element name="include-origin" type="tns:request-origin" maxOccurs="1" minOccurs="1"></element>
     		<element name="exclude-origin" type="tns:request-origin" maxOccurs="1" minOccurs="0"></element>
@@ -105,4 +105,16 @@
     	<restriction base="string"></restriction>
     </simpleType>
 
+
+    <complexType name="referer-constraints">
+    	<sequence>
+    		<element name="referer-constraint" type="tns:referer-constraint" maxOccurs="unbounded" minOccurs="1"></element>
+    	</sequence>
+    </complexType>
+
+    <complexType name="security-token-constraints">
+    	<sequence>
+    		<element name="security-token-constraint" type="tns:security-token-constraint" maxOccurs="unbounded" minOccurs="1"></element>
+    	</sequence>
+    </complexType>
 </schema>
