@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.nerdammer.it/sea-surf-config_1_0" xmlns:tns="http://www.nerdammer.it/sea-surf-config_1_0" elementFormDefault="qualified">
+
+    <element name="sea-surf-config" type="tns:sea-surf-config"></element>
+
+    <complexType name="request-type">
+    	<sequence>
+    		<element name="pattern">
+    			<simpleType>
+    				<restriction base="string">
+    					<minLength value="1"></minLength>
+    					<pattern value="(/).*"></pattern>
+    				</restriction>
+    			</simpleType>
+    		</element>
+    		<element name="methods" type="tns:methods" maxOccurs="1" minOccurs="0"></element>
+    	</sequence>
+    </complexType>
+
+    <complexType name="methods">
+    	<sequence>
+    		<element name="method" maxOccurs="unbounded"
+    			minOccurs="1">
+    			<simpleType>
+    				<restriction base="string">
+    					<enumeration value="GET"></enumeration>
+    					<enumeration value="POST"></enumeration>
+    					<enumeration value="PUT"></enumeration>
+    					<enumeration value="HEAD"></enumeration>
+    					<enumeration value="DELETE"></enumeration>
+    					<enumeration value="OPTIONS"></enumeration>
+    					<enumeration value="TRACE"></enumeration>
+    					<enumeration value="CONNECT"></enumeration>
+    					<enumeration value="PATCH"></enumeration>
+    				</restriction>
+    			</simpleType>
+    		</element>
+    	</sequence>
+    </complexType>
+
+
+    <complexType name="request-type-collection">
+    	<sequence>
+    		<element name="request-type" type="tns:request-type" maxOccurs="unbounded" minOccurs="1"></element>
+    	</sequence>
+    </complexType>
+
+
+    <complexType name="security-token">
+    	<sequence>
+    		<element name="scope" maxOccurs="1" minOccurs="1">
+    			<simpleType>
+    				<restriction base="string">
+    					<enumeration value="REQUEST"></enumeration>
+    					<enumeration value="SESSION"></enumeration>
+    				</restriction>
+    			</simpleType>
+    		</element>
+    		<element name="include" type="tns:request-type-collection"
+    			maxOccurs="1" minOccurs="1">
+    		</element>
+    		<element name="exclude" type="tns:request-type-collection" maxOccurs="1" minOccurs="0"></element>
+    	</sequence>
+    </complexType>
+
+    <complexType name="sea-surf-config">
+    	<sequence>
+    		<element name="security-token"
+    			type="tns:security-token" maxOccurs="1" minOccurs="0">
+    		</element>
+    		<element name="referer-constraints" type="tns:referer-constraints" maxOccurs="1" minOccurs="0"></element>
+    	</sequence>
+    </complexType>
+
+    <complexType name="referer-constraints">
+    	<sequence>
+    		<element name="include-origin" type="tns:request-origin" maxOccurs="1" minOccurs="1"></element>
+    		<element name="exclude-origin" type="tns:request-origin" maxOccurs="1" minOccurs="0"></element>
+    		<element name="include" type="tns:request-type-collection" maxOccurs="1" minOccurs="1"></element>
+    		<element name="exclude" type="tns:request-type-collection" maxOccurs="1" minOccurs="0"></element>
+    	</sequence>
+    </complexType>
+    
+
+    <complexType name="request-origin">
+    	<sequence>
+    		<choice maxOccurs="unbounded" minOccurs="1">
+    			<element name="page" type="tns:origin-page"
+    				maxOccurs="1" minOccurs="1">
+    			</element>
+    			<element name="domain" type="tns:origin-domain"
+    				maxOccurs="1" minOccurs="1">
+    			</element>
+    		</choice>
+    	</sequence>
+    </complexType>
+    
+
+
+    <simpleType name="origin-page">
+    	<restriction base="string"></restriction>
+    </simpleType>
+
+    <simpleType name="origin-domain">
+    	<restriction base="string"></restriction>
+    </simpleType>
+
+</schema>
