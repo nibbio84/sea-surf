@@ -43,10 +43,12 @@ class TokenManager {
 	public static String getTokenFromCookie(HttpServletRequest req, String nameOnStorage) {
 		Cookie[] cookies = req.getCookies();
 		String value = null;
-		for(Cookie c : cookies) {
-			if(nameOnStorage.equals(c.getName())) {
-				value = c.getValue();
-				break;
+		if(cookies!=null) {
+			for(Cookie c : cookies) {
+				if(nameOnStorage.equals(c.getName())) {
+					value = c.getValue();
+					break;
+				}
 			}
 		}
 		return value;
