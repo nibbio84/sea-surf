@@ -48,27 +48,40 @@
 
     <complexType name="security-token-constraint">
     	<sequence>
-    		<element name="scope" maxOccurs="1" minOccurs="1">
+    		<element name="token-storage" maxOccurs="1" minOccurs="1">
     			<simpleType>
     				<restriction base="string">
-    					<enumeration value="REQUEST"></enumeration>
     					<enumeration value="SESSION"></enumeration>
+    					<enumeration value="COOKIE"></enumeration>
+    				</restriction>
+    			</simpleType>
+    		</element>
+    		<element name="token-name" maxOccurs="1" minOccurs="0">
+    			<simpleType>
+    				<restriction base="string">
+    					<minLength value="1"></minLength>
     				</restriction>
     			</simpleType>
     		</element>
     		<element name="include" type="tns:request-type-collection"
     			maxOccurs="1" minOccurs="1">
     		</element>
-    		<element name="exclude" type="tns:request-type-collection" maxOccurs="1" minOccurs="0"></element>
+    		<element name="exclude" type="tns:request-type-collection"
+    			maxOccurs="1" minOccurs="0">
+    		</element>
     	</sequence>
     </complexType>
 
     <complexType name="sea-surf-config">
     	<sequence>
     		<element name="security-token-constraints"
-    			type="tns:security-token-constraints" maxOccurs="1" minOccurs="0">
+    			type="tns:security-token-constraints" maxOccurs="1"
+    			minOccurs="0">
     		</element>
-    		<element name="referer-constraints" type="tns:referer-constraints" maxOccurs="1" minOccurs="0"></element>
+    		<element name="referer-constraints"
+    			type="tns:referer-constraints" maxOccurs="1" minOccurs="0">
+    		</element>
+    		<element name="preferences" type="tns:preferences" maxOccurs="1" minOccurs="0"></element>
     	</sequence>
     </complexType>
 
@@ -98,11 +111,15 @@
 
 
     <simpleType name="origin-page">
-    	<restriction base="string"></restriction>
+    	<restriction base="string">
+    		<minLength value="1"></minLength>
+    	</restriction>
     </simpleType>
 
     <simpleType name="origin-domain">
-    	<restriction base="string"></restriction>
+    	<restriction base="string">
+    		<minLength value="1"></minLength>
+    	</restriction>
     </simpleType>
 
 
@@ -115,6 +132,19 @@
     <complexType name="security-token-constraints">
     	<sequence>
     		<element name="security-token-constraint" type="tns:security-token-constraint" maxOccurs="unbounded" minOccurs="1"></element>
+    	</sequence>
+    </complexType>
+
+    <complexType name="preferences">
+    	<sequence>
+    		<element name="token-length" minOccurs="0" maxOccurs="1" nillable="false">
+    			<simpleType>
+    				<restriction base="int">
+    					<minInclusive value="5"></minInclusive>
+    					<maxInclusive value="40"></maxInclusive>
+    				</restriction>
+    			</simpleType>
+    		</element>
     	</sequence>
     </complexType>
 </schema>
