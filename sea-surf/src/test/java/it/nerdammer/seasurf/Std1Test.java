@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.junit.Test;
 
-public class StdTest1 extends StdBaseTest {
+public class Std1Test extends StdBaseTest {
 
 	@Test
 	public void test1() {

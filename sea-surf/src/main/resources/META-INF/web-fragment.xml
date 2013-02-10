@@ -3,26 +3,18 @@
 	xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-fragment_3_0.xsd">
 	
-	<name>NibbioChannels</name>
+	<name>SeaSurf</name>
 	
-	<servlet>
-		<servlet-name>nibbioChannelsServlet</servlet-name>
-		<servlet-class>it.nerdammer.nibbio.channels.ChannelsServlet</servlet-class>
-		<async-supported>true</async-supported>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>nibbioChannelsServlet</servlet-name>
-		<url-pattern>/nibbiochannels/channels</url-pattern>
-	</servlet-mapping>
+	<filter>
+	    <description>SeaSurf Filter</description>
+	    <display-name>SeaSurf</display-name>
+	    <filter-name>seaSurfFilter</filter-name>
+	    <filter-class>it.nerdammer.seasurf.RequestFilter</filter-class>
+	</filter>
 	
-	<servlet>
-		<servlet-name>nibbioChannelsJavascriptLoaderServlet</servlet-name>
-		<servlet-class>it.nerdammer.nibbio.channels.ChannelsJavascriptLoaderServlet</servlet-class>
-		<async-supported>true</async-supported>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>nibbioChannelsJavascriptLoaderServlet</servlet-name>
-		<url-pattern>/nibbiochannels/client.js</url-pattern>
-	</servlet-mapping>
+	<filter-mapping>
+		<filter-name>seaSurfFilter</filter-name>
+		<url-pattern>*</url-pattern>	    
+	</filter-mapping>
 	
 </web-fragment>
