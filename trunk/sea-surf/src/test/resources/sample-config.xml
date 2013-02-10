@@ -5,7 +5,7 @@
 	
 	<security-token-constraints>
 		<security-token-constraint>
-			<scope>SESSION</scope>
+			<token-storage>SESSION</token-storage>
 			<include>
 				<request-type>
 					<pattern>/*</pattern>
@@ -29,7 +29,7 @@
 		<referer-constraint>
 			<include-origin>
 				<page>ss</page>
-				<domain></domain>
+				<domain>asd</domain>
 				<page>ssww</page>
 			</include-origin>
 
