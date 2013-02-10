@@ -4,20 +4,21 @@ import it.nerdammer.seasurf.stuff.BlockDetectionException;
 import it.nerdammer.seasurf.stuff.ForwardDetectionException;
 import it.nerdammer.seasurf.stuff.HttpServletRequestMock;
 import it.nerdammer.seasurf.stuff.HttpServletResponseMock;
+import it.nerdammer.seasurf.stuff.HttpSessionMock;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.junit.Assert;
 import org.junit.Test;
 
-public class StdTest3 extends StdBaseTest {
+public class Std2Test extends StdBaseTest {
 
 	@Test
 	public void test1() {
 		
-		RequestFilter filter = init("std-test-3.xml");
+		RequestFilter filter = init("std-test-2.xml");
 		
 		final String[] res = new String[1];
 		
@@ -35,23 +36,19 @@ public class StdTest3 extends StdBaseTest {
 				return "/basepath";
 			}
 			@Override
-			public Cookie[] getCookies() {
-				if(res[0]!=null) {
-					Cookie c = new Cookie(TokenManager.DEFAULT_STORE_KEY_NAME, res[0]); 
-					return new Cookie[]{c};
-				}
-				return null;
+			public HttpSession getSession(boolean create) {
+				return new HttpSessionMock() {
+					@Override
+					public void setAttribute(String k, Object v) {
+						if(k.equals(TokenManager.DEFAULT_STORE_KEY_NAME)) {
+							res[0] = (String)v;
+						}
+					}
+				};
 			}
 		};
 		
-		HttpServletResponse resp = new HttpServletResponseMock() {
-			@Override
-			public void addCookie(Cookie c) {
-				if(c.getName().equals(TokenManager.DEFAULT_STORE_KEY_NAME)) {
-					res[0] = c.getValue();
-				}
-			}
-		};
+		HttpServletResponse resp = new HttpServletResponseMock();
 		
 		try {
 			filter.doFilter(req, resp, getTestChain());
@@ -70,7 +67,7 @@ public class StdTest3 extends StdBaseTest {
 	@Test
 	public void test2() {
 		
-		RequestFilter filter = init("std-test-3.xml");
+		RequestFilter filter = init("std-test-2.xml");
 		
 		final String[] res = new String[1];
 		
@@ -88,23 +85,19 @@ public class StdTest3 extends StdBaseTest {
 				return "/basepath";
 			}
 			@Override
-			public Cookie[] getCookies() {
-				if(res[0]!=null) {
-					Cookie c = new Cookie(TokenManager.DEFAULT_STORE_KEY_NAME, res[0]); 
-					return new Cookie[]{c};
-				}
-				return null;
+			public HttpSession getSession(boolean create) {
+				return new HttpSessionMock() {
+					@Override
+					public void setAttribute(String k, Object v) {
+						if(k.equals(TokenManager.DEFAULT_STORE_KEY_NAME)) {
+							res[0] = (String)v;
+						}
+					}
+				};
 			}
 		};
 		
-		HttpServletResponse resp = new HttpServletResponseMock() {
-			@Override
-			public void addCookie(Cookie c) {
-				if(c.getName().equals(TokenManager.DEFAULT_STORE_KEY_NAME)) {
-					res[0] = c.getValue();
-				}
-			}
-		};
+		HttpServletResponse resp = new HttpServletResponseMock();
 		
 		try {
 			filter.doFilter(req, resp, getTestChain());
@@ -123,7 +116,7 @@ public class StdTest3 extends StdBaseTest {
 	@Test
 	public void test3() {
 		
-		RequestFilter filter = init("std-test-3.xml");
+		RequestFilter filter = init("std-test-2.xml");
 		
 		final String[] res = new String[1];
 		
@@ -134,30 +127,33 @@ public class StdTest3 extends StdBaseTest {
 			}
 			@Override
 			public String getRequestURI() {
-				return "/basepath/action";
+				return "/basepath/aaa";
 			}
 			@Override
 			public String getContextPath() {
 				return "/basepath";
 			}
 			@Override
-			public Cookie[] getCookies() {
-				if(res[0]!=null) {
-					Cookie c = new Cookie(TokenManager.DEFAULT_STORE_KEY_NAME, res[0]); 
-					return new Cookie[]{c};
-				}
-				return null;
+			public HttpSession getSession(boolean create) {
+				return new HttpSessionMock() {
+					@Override
+					public void setAttribute(String k, Object v) {
+						if(k.equals(TokenManager.DEFAULT_STORE_KEY_NAME)) {
+							res[0] = (String)v;
+						}
+					}
+					@Override
+					public Object getAttribute(String k) {
+						if(k.equals(TokenManager.DEFAULT_STORE_KEY_NAME)) {
+							return res[0];
+						}
+						return null;
+					}
+				};
 			}
 		};
 		
-		HttpServletResponse resp = new HttpServletResponseMock() {
-			@Override
-			public void addCookie(Cookie c) {
-				if(c.getName().equals(TokenManager.DEFAULT_STORE_KEY_NAME)) {
-					res[0] = c.getValue();
-				}
-			}
-		};
+		HttpServletResponse resp = new HttpServletResponseMock();
 		
 		try {
 			filter.doFilter(req, resp, getTestChain());
@@ -181,6 +177,7 @@ public class StdTest3 extends StdBaseTest {
 			throw new RuntimeException(e);
 		}
 		
+		
 		Assert.assertEquals(TokenManager.DEFAULT_TOKEN_LENGTH, res[0].length());
 		Assert.assertEquals(firstToken, res[0]);
 	}
@@ -188,7 +185,7 @@ public class StdTest3 extends StdBaseTest {
 	@Test
 	public void test4() {
 		
-		RequestFilter filter = init("std-test-3.xml");
+		RequestFilter filter = init("std-test-2.xml");
 		
 		final String[] res = new String[1];
 		
@@ -199,30 +196,33 @@ public class StdTest3 extends StdBaseTest {
 			}
 			@Override
 			public String getRequestURI() {
-				return "/basepath/action";
+				return "/basepath/aaa";
 			}
 			@Override
 			public String getContextPath() {
 				return "/basepath";
 			}
 			@Override
-			public Cookie[] getCookies() {
-				if(res[0]!=null) {
-					Cookie c = new Cookie(TokenManager.DEFAULT_STORE_KEY_NAME, res[0]); 
-					return new Cookie[]{c};
-				}
-				return null;
+			public HttpSession getSession(boolean create) {
+				return new HttpSessionMock() {
+					@Override
+					public void setAttribute(String k, Object v) {
+						if(k.equals(TokenManager.DEFAULT_STORE_KEY_NAME)) {
+							res[0] = (String)v;
+						}
+					}
+					@Override
+					public Object getAttribute(String k) {
+						if(k.equals(TokenManager.DEFAULT_STORE_KEY_NAME)) {
+							return res[0];
+						}
+						return null;
+					}
+				};
 			}
 		};
 		
-		HttpServletResponse resp = new HttpServletResponseMock() {
-			@Override
-			public void addCookie(Cookie c) {
-				if(c.getName().equals(TokenManager.DEFAULT_STORE_KEY_NAME)) {
-					res[0] = c.getValue();
-				}
-			}
-		};
+		HttpServletResponse resp = new HttpServletResponseMock();
 		
 		try {
 			filter.doFilter(req, resp, getTestChain());
@@ -243,7 +243,7 @@ public class StdTest3 extends StdBaseTest {
 			}
 			@Override
 			public String getRequestURI() {
-				return "/basepath/action";
+				return "/basepath/aaa";
 			}
 			@Override
 			public String getContextPath() {
@@ -257,12 +257,22 @@ public class StdTest3 extends StdBaseTest {
 				return null;
 			}
 			@Override
-			public Cookie[] getCookies() {
-				if(res[0]!=null) {
-					Cookie c = new Cookie(TokenManager.DEFAULT_STORE_KEY_NAME, res[0]); 
-					return new Cookie[]{c};
-				}
-				return null;
+			public HttpSession getSession(boolean create) {
+				return new HttpSessionMock() {
+					@Override
+					public void setAttribute(String k, Object v) {
+						if(k.equals(TokenManager.DEFAULT_STORE_KEY_NAME)) {
+							res[0] = (String)v;
+						}
+					}
+					@Override
+					public Object getAttribute(String k) {
+						if(k.equals(TokenManager.DEFAULT_STORE_KEY_NAME)) {
+							return res[0];
+						}
+						return null;
+					}
+				};
 			}
 		};
 		
@@ -275,7 +285,7 @@ public class StdTest3 extends StdBaseTest {
 		} catch(Exception e) {
 			throw new RuntimeException(e);
 		}
-		
 	}
+
 	
 }
