@@ -25,7 +25,7 @@ public class MatchingUtils {
 	public static Logger logger = Logger.getLogger(MatchingUtils.class);
 	
 	public static boolean tokenMatches(HttpServletRequest req, SecurityTokenConstraint constr, Preferences prefs) {
-		String storedToken = TokenManager.getStoredToken(req, constr, prefs);
+		String storedToken = TokenManager.getStoredToken(req, prefs);
 		String requestToken = TokenManager.getTokenOnRequest(req, constr, prefs);
 		if(storedToken==null || !storedToken.equals(requestToken)) {
 			return false;

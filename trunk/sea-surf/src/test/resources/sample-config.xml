@@ -5,7 +5,6 @@
 	
 	<security-token-constraints>
 		<security-token-constraint>
-			<token-storage>SESSION</token-storage>
 			<include>
 				<request-type>
 					<pattern>/*</pattern>

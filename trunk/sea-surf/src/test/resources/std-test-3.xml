@@ -20,9 +20,11 @@
 				</request-type>
 			</exclude>
 			
-			<token-storage>COOKIE</token-storage>
-			
 		</security-token-constraint>
 	</security-token-constraints>
+	
+	<preferences>
+		<token-storage>COOKIE</token-storage>
+	</preferences>
 
 </sea-surf-config>

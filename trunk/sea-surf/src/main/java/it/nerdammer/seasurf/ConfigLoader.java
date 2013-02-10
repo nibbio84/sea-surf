@@ -60,7 +60,7 @@ class ConfigLoader {
 			Schema schema = schemaFact.newSchema(schemaSource);
 			
 			Validator validator = schema.newValidator();
-			validator.validate(new DOMSource(doc.getDocumentElement().getFirstChild()));
+			validator.validate(new DOMSource(doc));
 			
 			JAXBContext ctx = JAXBContext.newInstance(ObjectFactory.class.getPackage().getName());
 			Unmarshaller unmarsaller = ctx.createUnmarshaller();

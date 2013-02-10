@@ -12,16 +12,6 @@
 		<tag-class>it.nerdammer.seasurf.TokenTag</tag-class>
 		<body-content>empty</body-content>
 		<attribute>
-			<name>storage</name>
-			<required>true</required>
-			<rtexprvalue>true</rtexprvalue>
-		</attribute>
-		<attribute>
-			<name>nameOnStorage</name>
-			<required>false</required>
-			<rtexprvalue>true</rtexprvalue>
-		</attribute>
-		<attribute>
 			<name>var</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
@@ -32,21 +22,6 @@
 		<name>token-input</name>
 		<tag-class>it.nerdammer.seasurf.TokenInputTag</tag-class>
 		<body-content>empty</body-content>
-		<attribute>
-			<name>storage</name>
-			<required>true</required>
-			<rtexprvalue>true</rtexprvalue>
-		</attribute>
-		<attribute>
-			<name>nameOnStorage</name>
-			<required>false</required>
-			<rtexprvalue>true</rtexprvalue>
-		</attribute>
-		<attribute>
-			<name>parameterName</name>
-			<required>false</required>
-			<rtexprvalue>true</rtexprvalue>
-		</attribute>
 	</tag>
 	
 </taglib>

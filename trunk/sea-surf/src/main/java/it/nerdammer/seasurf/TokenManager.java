@@ -17,25 +17,25 @@ class TokenManager {
 	public static final int DEFAULT_TOKEN_LENGTH = 30;
 	
 	public static String getTokenOnRequest(HttpServletRequest req, SecurityTokenConstraint constr, Preferences prefs) {
-		String paramKey = getRequestKeyName(constr);
+		String paramKey = getRequestKeyName(prefs);
 		String token = req.getParameter(paramKey);
 		return token;
 	}
 	
-	public static String getStoredToken(HttpServletRequest req, SecurityTokenConstraint constr, Preferences prefs) {
-		if("COOKIE".equals(constr.getTokenStorage())) {
-			String value = getTokenFromCookie(req, constr);
+	public static String getStoredToken(HttpServletRequest req, Preferences prefs) {
+		if(prefs==null || "SESSION".equals(prefs.getTokenStorage())) {
+			String value = getTokenFromSession(req, prefs);
 			return value;
-		} else if("SESSION".equals(constr.getTokenStorage())) {
-			String value = getTokenFromSession(req, constr);
+		} else if("COOKIE".equals(prefs.getTokenStorage())) {
+			String value = getTokenFromCookie(req, prefs);
 			return value;
 		} else {
-			throw new IllegalArgumentException("Unknown token storage: " + constr.getTokenStorage());
+			throw new IllegalArgumentException("Unknown token storage: " + prefs.getTokenStorage());
 		}
 	}
 	
-	public static String getTokenFromCookie(HttpServletRequest req, SecurityTokenConstraint constr) {
-		String nameOnStorage = getStoreKeyName(constr);
+	public static String getTokenFromCookie(HttpServletRequest req, Preferences prefs) {
+		String nameOnStorage = getStoreKeyName(prefs);
 		String value = getTokenFromCookie(req, nameOnStorage);
 		return value;
 	}
@@ -54,8 +54,8 @@ class TokenManager {
 		return value;
 	}
 	
-	public static String getTokenFromSession(HttpServletRequest req, SecurityTokenConstraint constr) {
-		String nameOnStorage = getStoreKeyName(constr);
+	public static String getTokenFromSession(HttpServletRequest req, Preferences prefs) {
+		String nameOnStorage = getStoreKeyName(prefs);
 		String value = getTokenFromSession(req, nameOnStorage);
 		return value;
 	}
@@ -66,35 +66,33 @@ class TokenManager {
 	}
 	
 	public static void refreshTokens(HttpServletRequest req, HttpServletResponse res, SecurityTokenConstraints constrs, Preferences prefs) {
-		if(constrs!=null) {
-			for(SecurityTokenConstraint c : constrs.getSecurityTokenConstraint()) {
-				if("COOKIE".equals(c.getTokenStorage())) {
-					refreshTokenOnCookie(req, res, c, prefs);
-				} else if("SESSION".equals(c.getTokenStorage())) {
-					refreshTokenOnSession(req, res, c, prefs);
-				} else {
-					throw new IllegalArgumentException("Unknown token storage: " + c.getTokenStorage());
-				}
+		if(constrs!=null && constrs.getSecurityTokenConstraint().size()>0) {
+			if(prefs==null || "SESSION".equals(prefs.getTokenStorage())) {
+				refreshTokenOnSession(req, res, prefs);
+			} else if("COOKIE".equals(prefs.getTokenStorage())) {
+				refreshTokenOnCookie(req, res, prefs);
+			} else {
+				throw new IllegalArgumentException("Unknown token storage: " + prefs.getTokenStorage());
 			}
 		}
 	}
 	
-	public static void refreshTokenOnCookie(HttpServletRequest req, HttpServletResponse res, SecurityTokenConstraint constr, Preferences prefs) {
-		String value = getTokenFromCookie(req, constr);
+	public static void refreshTokenOnCookie(HttpServletRequest req, HttpServletResponse res, Preferences prefs) {
+		String value = getTokenFromCookie(req, prefs);
 		if(value==null) {
 			value = newRandomToken(prefs);
-			Cookie c = new Cookie(getStoreKeyName(constr), value);
+			Cookie c = new Cookie(getStoreKeyName(prefs), value);
 			c.setPath(req.getContextPath());
 			c.setMaxAge(-1);
 			res.addCookie(c);
 		}
 	}
 	
-	public static void refreshTokenOnSession(HttpServletRequest req, HttpServletResponse res, SecurityTokenConstraint constr, Preferences prefs) {
-		String value = getTokenFromSession(req, constr);
+	public static void refreshTokenOnSession(HttpServletRequest req, HttpServletResponse res, Preferences prefs) {
+		String value = getTokenFromSession(req, prefs);
 		if(value==null) {
 			value = newRandomToken(prefs);
-			req.getSession(true).setAttribute(getStoreKeyName(constr), value);
+			req.getSession(true).setAttribute(getStoreKeyName(prefs), value);
 		}
 	}
 	
@@ -122,18 +120,18 @@ class TokenManager {
 		return v;
 	}
 	
-	public static String getStoreKeyName(SecurityTokenConstraint constr) {
-		if(constr==null || constr.getTokenNameOnStorage()==null) {
+	public static String getStoreKeyName(Preferences prefs) {
+		if(prefs==null || prefs.getTokenNameOnStorage()==null) {
 			return DEFAULT_STORE_KEY_NAME;
 		}
-		return constr.getTokenNameOnStorage();
+		return prefs.getTokenNameOnStorage();
 	}
 	
-	public static String getRequestKeyName(SecurityTokenConstraint constr) {
-		if(constr==null || constr.getTokenParameterName()==null) {
+	public static String getRequestKeyName(Preferences prefs) {
+		if(prefs==null || prefs.getTokenParameterName()==null) {
 			return DEFAULT_REQUEST_KEY_NAME;
 		}
-		return constr.getTokenParameterName();
+		return prefs.getTokenParameterName();
 	}
 	
 	public static int getTokenLength(Preferences prefs) {

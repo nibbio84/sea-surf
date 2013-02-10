@@ -19,10 +19,8 @@
 					<pattern>/ciccia</pattern>
 				</request-type>
 			</exclude>
-			
-			<token-storage>SESSION</token-storage>
-			
 		</security-token-constraint>
 	</security-token-constraints>
+	
 
 </sea-surf-config>
