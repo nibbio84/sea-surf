@@ -1,10 +1,13 @@
 package it.nerdammer.seasurf;
 
+import it.nerdammer.seasurf.config.Preferences;
 import it.nerdammer.seasurf.config.RefererConstraint;
 import it.nerdammer.seasurf.config.RefererConstraints;
 import it.nerdammer.seasurf.config.RequestOrigin;
 import it.nerdammer.seasurf.config.RequestTypeCollection;
 import it.nerdammer.seasurf.config.SeaSurfConfig;
+import it.nerdammer.seasurf.config.SecurityTokenConstraint;
+import it.nerdammer.seasurf.config.SecurityTokenConstraints;
 
 import java.io.IOException;
 import java.util.List;
@@ -31,8 +34,36 @@ public class RequestFilter implements Filter {
 		HttpServletRequest httpReq = (HttpServletRequest) req;
 		HttpServletResponse httpResp = (HttpServletResponse) resp;
 		SeaSurfConfig config = ConfigHandler.getConfig();
+		Preferences prefs = config.getPreferences();
 		
 		// Token security
+		SecurityTokenConstraints tokConstraints = config.getSecurityTokenConstraints();
+		if(tokConstraints!=null) {
+			// Initialize the tokens on storage for subsequent requests
+			TokenManager.refreshTokens(httpReq, httpResp, tokConstraints, prefs);
+			
+			List<SecurityTokenConstraint> constr = tokConstraints.getSecurityTokenConstraint();
+			for(SecurityTokenConstraint con : constr) {
+				RequestTypeCollection include = con.getInclude();
+				RequestTypeCollection exclude = con.getExclude();
+				boolean matches = MatchingUtils.resourceMatches(httpReq, include, exclude);
+				
+				if(matches) {
+					boolean tokenMatches = MatchingUtils.tokenMatches(httpReq, con, prefs);
+					if(!tokenMatches) {
+						boolean present = (TokenManager.getTokenOnRequest(httpReq, con, prefs)!=null);
+						if(present) {
+							block(httpReq, httpResp, "Seasurf token does not match");
+						} else {
+							block(httpReq, httpResp, "Seasurf token not found on request parameter");
+						}
+						return;
+					}
+				}
+			}
+		}
+		
+		
 		
 		// Referer security
 		RefererConstraints refConstraints = config.getRefererConstraints();
@@ -46,7 +77,8 @@ public class RequestFilter implements Filter {
 				if(matches) {
 					RequestOrigin includeOrigin = con.getIncludeOrigin();
 					RequestOrigin excludeOrigin = con.getExcludeOrigin();
-					boolean matchesOrigin = MatchingUtils.originMatches(httpReq, includeOrigin, excludeOrigin);
+					boolean blockIfMissing = MatchingUtils.originGetBlockIfMissingProperty(con);
+					boolean matchesOrigin = MatchingUtils.originMatches(httpReq, includeOrigin, excludeOrigin, blockIfMissing);
 					
 					if(!matchesOrigin) {
 						block(httpReq, httpResp, "Request origin not allowed for the requested page");
@@ -61,8 +93,9 @@ public class RequestFilter implements Filter {
 		chain.doFilter(req, resp);
 	}
 	
-	protected void block(HttpServletRequest req, HttpServletResponse res, String cause) {
-		
+	protected void block(HttpServletRequest req, HttpServletResponse res, String cause) throws IOException {
+		res.setStatus(403);
+		res.getWriter().println("Blocked by seasurf");
 	}
 	
 	public void destroy() {

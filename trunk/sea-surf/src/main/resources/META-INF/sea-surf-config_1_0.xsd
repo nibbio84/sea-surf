@@ -4,7 +4,7 @@
     <element name="sea-surf-config" type="tns:sea-surf-config"></element>
 
     <complexType name="request-type">
-    	<sequence>
+    	<all>
     		<element name="pattern">
     			<simpleType>
     				<restriction base="string">
@@ -14,7 +14,7 @@
     			</simpleType>
     		</element>
     		<element name="methods" type="tns:methods" maxOccurs="1" minOccurs="0"></element>
-    	</sequence>
+    	</all>
     </complexType>
 
     <complexType name="methods">
@@ -47,8 +47,16 @@
 
 
     <complexType name="security-token-constraint">
-    	<sequence>
-    		<element name="token-storage" maxOccurs="1" minOccurs="1">
+    	<all>
+            <element name="token-parameter-name" maxOccurs="1"
+            	minOccurs="0">
+            	<simpleType>
+            		<restriction base="string">
+            			<minLength value="1"></minLength>
+            		</restriction>
+            	</simpleType>
+            </element>
+            <element name="token-storage" maxOccurs="1" minOccurs="1">
     			<simpleType>
     				<restriction base="string">
     					<enumeration value="SESSION"></enumeration>
@@ -56,7 +64,7 @@
     				</restriction>
     			</simpleType>
     		</element>
-    		<element name="token-name" maxOccurs="1" minOccurs="0">
+    		<element name="token-name-on-storage" maxOccurs="1" minOccurs="0">
     			<simpleType>
     				<restriction base="string">
     					<minLength value="1"></minLength>
@@ -69,11 +77,11 @@
     		<element name="exclude" type="tns:request-type-collection"
     			maxOccurs="1" minOccurs="0">
     		</element>
-    	</sequence>
+    	</all>
     </complexType>
 
     <complexType name="sea-surf-config">
-    	<sequence>
+    	<all>
     		<element name="security-token-constraints"
     			type="tns:security-token-constraints" maxOccurs="1"
     			minOccurs="0">
@@ -82,16 +90,33 @@
     			type="tns:referer-constraints" maxOccurs="1" minOccurs="0">
     		</element>
     		<element name="preferences" type="tns:preferences" maxOccurs="1" minOccurs="0"></element>
-    	</sequence>
+    	</all>
     </complexType>
 
     <complexType name="referer-constraint">
-    	<sequence>
-    		<element name="include-origin" type="tns:request-origin" maxOccurs="1" minOccurs="1"></element>
-    		<element name="exclude-origin" type="tns:request-origin" maxOccurs="1" minOccurs="0"></element>
-    		<element name="include" type="tns:request-type-collection" maxOccurs="1" minOccurs="1"></element>
-    		<element name="exclude" type="tns:request-type-collection" maxOccurs="1" minOccurs="0"></element>
-    	</sequence>
+    	<all>
+    		<element name="on-missing-referer" maxOccurs="1"
+    			minOccurs="1">
+    			<simpleType>
+    				<restriction base="string">
+    					<enumeration value="BLOCK"></enumeration>
+    					<enumeration value="ALLOW"></enumeration>
+    				</restriction>
+    			</simpleType>
+    		</element>
+            <element name="include-origin" type="tns:request-origin"
+    			maxOccurs="1" minOccurs="1">
+    		</element>
+    		<element name="exclude-origin" type="tns:request-origin"
+    			maxOccurs="1" minOccurs="0">
+    		</element>
+    		<element name="include" type="tns:request-type-collection"
+    			maxOccurs="1" minOccurs="1">
+    		</element>
+    		<element name="exclude" type="tns:request-type-collection"
+    			maxOccurs="1" minOccurs="0">
+    		</element>
+    	</all>
     </complexType>
     
 
@@ -140,8 +165,28 @@
     		<element name="token-length" minOccurs="0" maxOccurs="1" nillable="false">
     			<simpleType>
     				<restriction base="int">
-    					<minInclusive value="5"></minInclusive>
-    					<maxInclusive value="40"></maxInclusive>
+    					<minInclusive value="12"></minInclusive>
+    					<maxInclusive value="50"></maxInclusive>
+    					<enumeration value="12"></enumeration>
+    					<enumeration value="14"></enumeration>
+    					<enumeration value="16"></enumeration>
+    					<enumeration value="18"></enumeration>
+    					<enumeration value="20"></enumeration>
+    					<enumeration value="22"></enumeration>
+    					<enumeration value="24"></enumeration>
+    					<enumeration value="26"></enumeration>
+    					<enumeration value="28"></enumeration>
+    					<enumeration value="30"></enumeration>
+    					<enumeration value="32"></enumeration>
+    					<enumeration value="34"></enumeration>
+    					<enumeration value="36"></enumeration>
+    					<enumeration value="38"></enumeration>
+    					<enumeration value="40"></enumeration>
+    					<enumeration value="42"></enumeration>
+    					<enumeration value="44"></enumeration>
+    					<enumeration value="46"></enumeration>
+    					<enumeration value="48"></enumeration>
+    					<enumeration value="50"></enumeration>
     				</restriction>
     			</simpleType>
     		</element>
