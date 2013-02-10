@@ -1,5 +1,7 @@
 package it.nerdammer.seasurf;
 
+import it.nerdammer.seasurf.config.Preferences;
+
 import java.io.IOException;
 
 import javax.servlet.http.HttpServletRequest;
@@ -11,8 +13,6 @@ public class TokenTag extends BodyTagSupport {
 	private static final long serialVersionUID = 1L;
 	
 	
-	private String storage;
-	private String nameOnStorage;
 	private String var;
 	
 	
@@ -21,14 +21,8 @@ public class TokenTag extends BodyTagSupport {
 		
 		HttpServletRequest req = (HttpServletRequest) pageContext.getRequest();
 		
-		String token;
-		if("COOKIE".equalsIgnoreCase(storage)) {
-			token = TokenManager.getTokenFromCookie(req, nameOnStorage);
-		} else if("SESSION".equalsIgnoreCase(storage)) {
-			token = TokenManager.getTokenFromSession(req, nameOnStorage);
-		} else {
-			throw new IllegalArgumentException("Unknown storage: " + storage + " - Only SESSION or COOKIE can be accepted");
-		}
+		Preferences prefs = ConfigHandler.getConfig().getPreferences();
+		String token = TokenManager.getStoredToken(req, prefs);
 		
 		if(token!=null) {
 			if(var==null) {
@@ -51,22 +45,6 @@ public class TokenTag extends BodyTagSupport {
 	
 	public String getVar() {
 		return var;
-	}
-	
-	public void setNameOnStorage(String nameOnStorage) {
-		this.nameOnStorage = nameOnStorage;
-	}
-	
-	public String getNameOnStorage() {
-		return nameOnStorage;
-	}
-	
-	public String getStorage() {
-		return storage;
-	}
-	
-	public void setStorage(String storage) {
-		this.storage = storage;
 	}
 	
 }

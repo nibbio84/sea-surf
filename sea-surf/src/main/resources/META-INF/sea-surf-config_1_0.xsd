@@ -48,29 +48,6 @@
 
     <complexType name="security-token-constraint">
     	<all>
-            <element name="token-parameter-name" maxOccurs="1"
-            	minOccurs="0">
-            	<simpleType>
-            		<restriction base="string">
-            			<minLength value="1"></minLength>
-            		</restriction>
-            	</simpleType>
-            </element>
-            <element name="token-storage" maxOccurs="1" minOccurs="1">
-    			<simpleType>
-    				<restriction base="string">
-    					<enumeration value="SESSION"></enumeration>
-    					<enumeration value="COOKIE"></enumeration>
-    				</restriction>
-    			</simpleType>
-    		</element>
-    		<element name="token-name-on-storage" maxOccurs="1" minOccurs="0">
-    			<simpleType>
-    				<restriction base="string">
-    					<minLength value="1"></minLength>
-    				</restriction>
-    			</simpleType>
-    		</element>
     		<element name="include" type="tns:request-type-collection"
     			maxOccurs="1" minOccurs="1">
     		</element>
@@ -161,8 +138,9 @@
     </complexType>
 
     <complexType name="preferences">
-    	<sequence>
-    		<element name="token-length" minOccurs="0" maxOccurs="1" nillable="false">
+    	<all>
+    		<element name="token-length" minOccurs="0" maxOccurs="1"
+    			nillable="false">
     			<simpleType>
     				<restriction base="int">
     					<minInclusive value="12"></minInclusive>
@@ -190,6 +168,30 @@
     				</restriction>
     			</simpleType>
     		</element>
-    	</sequence>
+    		<element name="token-parameter-name" maxOccurs="1"
+    			minOccurs="0">
+    			<simpleType>
+    				<restriction base="string">
+    					<minLength value="1"></minLength>
+    				</restriction>
+    			</simpleType>
+    		</element>
+    		<element name="token-storage" maxOccurs="1" minOccurs="0">
+    			<simpleType>
+    				<restriction base="string">
+    					<enumeration value="SESSION"></enumeration>
+    					<enumeration value="COOKIE"></enumeration>
+    				</restriction>
+    			</simpleType>
+    		</element>
+    		<element name="token-name-on-storage" maxOccurs="1"
+    			minOccurs="0">
+    			<simpleType>
+    				<restriction base="string">
+    					<minLength value="1"></minLength>
+    				</restriction>
+    			</simpleType>
+    		</element>
+    	</all>
     </complexType>
 </schema>
