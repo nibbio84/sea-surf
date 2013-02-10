@@ -24,21 +24,27 @@ class TokenManager {
 	
 	public static String getStoredToken(HttpServletRequest req, SecurityTokenConstraint constr, Preferences prefs) {
 		if("COOKIE".equals(constr.getTokenStorage())) {
-			String value = getTokenFromCookie(req, constr, prefs);
+			String value = getTokenFromCookie(req, constr);
 			return value;
 		} else if("SESSION".equals(constr.getTokenStorage())) {
-			String value = getTokenFromSession(req, constr, prefs);
+			String value = getTokenFromSession(req, constr);
 			return value;
 		} else {
 			throw new IllegalArgumentException("Unknown token storage: " + constr.getTokenStorage());
 		}
 	}
 	
-	public static String getTokenFromCookie(HttpServletRequest req, SecurityTokenConstraint constr, Preferences prefs) {
+	public static String getTokenFromCookie(HttpServletRequest req, SecurityTokenConstraint constr) {
+		String nameOnStorage = getStoreKeyName(constr);
+		String value = getTokenFromCookie(req, nameOnStorage);
+		return value;
+	}
+	
+	public static String getTokenFromCookie(HttpServletRequest req, String nameOnStorage) {
 		Cookie[] cookies = req.getCookies();
 		String value = null;
 		for(Cookie c : cookies) {
-			if(getStoreKeyName(constr).equals(c.getName())) {
+			if(nameOnStorage.equals(c.getName())) {
 				value = c.getValue();
 				break;
 			}
@@ -46,8 +52,14 @@ class TokenManager {
 		return value;
 	}
 	
-	public static String getTokenFromSession(HttpServletRequest req, SecurityTokenConstraint constr, Preferences prefs) {
-		String value = (String) req.getSession().getAttribute(getStoreKeyName(constr));
+	public static String getTokenFromSession(HttpServletRequest req, SecurityTokenConstraint constr) {
+		String nameOnStorage = getStoreKeyName(constr);
+		String value = getTokenFromSession(req, nameOnStorage);
+		return value;
+	}
+	
+	public static String getTokenFromSession(HttpServletRequest req, String nameOnStorage) {
+		String value = (String) req.getSession().getAttribute(nameOnStorage);
 		return value;
 	}
 	
@@ -66,7 +78,7 @@ class TokenManager {
 	}
 	
 	public static void refreshTokenOnCookie(HttpServletRequest req, HttpServletResponse res, SecurityTokenConstraint constr, Preferences prefs) {
-		String value = getTokenFromCookie(req, constr, prefs);
+		String value = getTokenFromCookie(req, constr);
 		if(value==null) {
 			value = newRandomToken(prefs);
 			Cookie c = new Cookie(getStoreKeyName(constr), value);
@@ -77,7 +89,7 @@ class TokenManager {
 	}
 	
 	public static void refreshTokenOnSession(HttpServletRequest req, HttpServletResponse res, SecurityTokenConstraint constr, Preferences prefs) {
-		String value = getTokenFromSession(req, constr, prefs);
+		String value = getTokenFromSession(req, constr);
 		if(value==null) {
 			value = newRandomToken(prefs);
 			req.getSession(true).setAttribute(getStoreKeyName(constr), value);
