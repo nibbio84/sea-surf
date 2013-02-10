@@ -308,13 +308,11 @@ public class HttpServletRequestMock implements HttpServletRequest {
 		return null;
 	}
 
-	public HttpSession getSession() {
-		// TODO Auto-generated method stub
-		return null;
+	public final HttpSession getSession() {
+		return getSession(true);
 	}
 
 	public HttpSession getSession(boolean arg0) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

@@ -5,6 +5,7 @@
 
 	<referer-constraints>
 		<referer-constraint>
+			<on-missing-referer>BLOCK</on-missing-referer>
 			<include-origin>
 				<page>http://www.google.*</page>
 				<page>https://www.google.*</page>
@@ -18,6 +19,7 @@
 		</referer-constraint>
 		
 		<referer-constraint>
+			<on-missing-referer>ALLOW</on-missing-referer>
 			<include-origin>
 				<domain>www.nerdammer.it</domain>
 			</include-origin>

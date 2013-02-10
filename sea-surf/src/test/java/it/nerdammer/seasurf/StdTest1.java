@@ -39,8 +39,10 @@ public class StdTest1 extends StdBaseTest {
 			}
 		};
 		
+		HttpServletResponse res = new HttpServletResponseMock();
+		
 		try {
-			filter.doFilter(req, null, getTestChain());
+			filter.doFilter(req, res, getTestChain());
 		} catch(BlockDetectionException e) {
 			throw e;
 		} catch(ForwardDetectionException e) {
@@ -198,6 +200,44 @@ public class StdTest1 extends StdBaseTest {
 					return "https://www.google.it";
 				}
 				throw new IllegalArgumentException();
+			}
+		};
+		
+		HttpServletResponse res = new HttpServletResponseMock();
+		
+		try {
+			filter.doFilter(req, res, getTestChain());
+		} catch(BlockDetectionException e) {
+			throw e;
+		} catch(ForwardDetectionException e) {
+			// ok
+		} catch(Exception e) {
+			throw new RuntimeException(e);
+		}
+		
+	}
+	
+	@Test
+	public void test6() {
+		
+		RequestFilter filter = init("std-test-1.xml");
+		
+		HttpServletRequest req = new HttpServletRequestMock() {
+			@Override
+			public String getMethod() {
+				return "post";
+			}
+			@Override
+			public String getRequestURI() {
+				return "/basepath/azionista";
+			}
+			@Override
+			public String getContextPath() {
+				return "/basepath";
+			}
+			@Override
+			public String getHeader(String header) {
+				return null;
 			}
 		};
 		

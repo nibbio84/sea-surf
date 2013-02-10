@@ -1,9 +1,12 @@
 package it.nerdammer.seasurf;
 
 import it.nerdammer.seasurf.config.Methods;
+import it.nerdammer.seasurf.config.Preferences;
+import it.nerdammer.seasurf.config.RefererConstraint;
 import it.nerdammer.seasurf.config.RequestOrigin;
 import it.nerdammer.seasurf.config.RequestType;
 import it.nerdammer.seasurf.config.RequestTypeCollection;
+import it.nerdammer.seasurf.config.SecurityTokenConstraint;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -21,11 +24,25 @@ public class MatchingUtils {
 
 	public static Logger logger = Logger.getLogger(MatchingUtils.class);
 	
-	public static boolean originMatches(HttpServletRequest request, RequestOrigin include, RequestOrigin exclude) {
-		return originMatches(request, include) && !originMatches(request, exclude);
+	public static boolean tokenMatches(HttpServletRequest req, SecurityTokenConstraint constr, Preferences prefs) {
+		String storedToken = TokenManager.getStoredToken(req, constr, prefs);
+		String requestToken = TokenManager.getTokenOnRequest(req, constr, prefs);
+		if(storedToken==null || !storedToken.equals(requestToken)) {
+			return false;
+		}
+		
+		return true;
 	}
 	
-	public static boolean originMatches(HttpServletRequest request, RequestOrigin origin) {
+	public static boolean originGetBlockIfMissingProperty(RefererConstraint constr) {
+		return "BLOCK".equals(constr.getOnMissingReferer());
+	}
+	
+	public static boolean originMatches(HttpServletRequest request, RequestOrigin include, RequestOrigin exclude, boolean blockIfMissing) {
+		return originMatches(request, include, blockIfMissing) && !originMatches(request, exclude, blockIfMissing);
+	}
+	
+	public static boolean originMatches(HttpServletRequest request, RequestOrigin origin, boolean blockIfMissing) {
 		if(origin==null) {
 			return false;
 		}
@@ -34,11 +51,11 @@ public class MatchingUtils {
 			String type = pageOrDomain.getName().getLocalPart();
 			String value = pageOrDomain.getValue();
 			if("page".equals(type)) {
-				if(originMatchesPage(request, value)) {
+				if(originMatchesPage(request, value, blockIfMissing)) {
 					return true;
 				}
 			} else if("domain".equals(type)) {
-				if(originMatchesDomain(request, value)) {
+				if(originMatchesDomain(request, value, blockIfMissing)) {
 					return true;
 				}
 			} else {
@@ -49,10 +66,10 @@ public class MatchingUtils {
 		return false;
 	}
 	
-	public static boolean originMatchesDomain(HttpServletRequest request, String domain) {
+	public static boolean originMatchesDomain(HttpServletRequest request, String domain, boolean blockIfMissing) {
 		String referer = request.getHeader("Referer");
 		if(referer==null) {
-			return false;
+			return !blockIfMissing;
 		}
 		URL url;
 		try {
@@ -66,10 +83,10 @@ public class MatchingUtils {
 		return matches;
 	}
 	
-	public static boolean originMatchesPage(HttpServletRequest request, String page) {
+	public static boolean originMatchesPage(HttpServletRequest request, String page, boolean blockIfMissing) {
 		String referer = request.getHeader("Referer");
 		if(referer==null) {
-			return false;
+			return !blockIfMissing;
 		}
 		boolean matches = stringMatches(referer, page);
 		return matches;
