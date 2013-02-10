@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-fragment metadata-complete="true" version="3.0"
+	xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-fragment_3_0.xsd">
+	
+	<name>NibbioChannels</name>
+	
+	<servlet>
+		<servlet-name>nibbioChannelsServlet</servlet-name>
+		<servlet-class>it.nerdammer.nibbio.channels.ChannelsServlet</servlet-class>
+		<async-supported>true</async-supported>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>nibbioChannelsServlet</servlet-name>
+		<url-pattern>/nibbiochannels/channels</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>nibbioChannelsJavascriptLoaderServlet</servlet-name>
+		<servlet-class>it.nerdammer.nibbio.channels.ChannelsJavascriptLoaderServlet</servlet-class>
+		<async-supported>true</async-supported>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>nibbioChannelsJavascriptLoaderServlet</servlet-name>
+		<url-pattern>/nibbiochannels/client.js</url-pattern>
+	</servlet-mapping>
+	
+</web-fragment>

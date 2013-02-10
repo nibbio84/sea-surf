@@ -181,6 +181,111 @@ public class StdTest2 extends StdBaseTest {
 		Assert.assertEquals(TokenManager.DEFAULT_TOKEN_LENGTH, res[0].length());
 		Assert.assertEquals(firstToken, res[0]);
 	}
+	
+	@Test
+	public void test4() {
+		
+		RequestFilter filter = init("std-test-2.xml");
+		
+		final String[] res = new String[1];
+		
+		HttpServletRequest req = new HttpServletRequestMock() {
+			@Override
+			public String getMethod() {
+				return "post";
+			}
+			@Override
+			public String getRequestURI() {
+				return "/basepath/aaa";
+			}
+			@Override
+			public String getContextPath() {
+				return "/basepath";
+			}
+			@Override
+			public HttpSession getSession(boolean create) {
+				return new HttpSessionMock() {
+					@Override
+					public void setAttribute(String k, Object v) {
+						if(k.equals(TokenManager.DEFAULT_STORE_KEY_NAME)) {
+							res[0] = (String)v;
+						}
+					}
+					@Override
+					public Object getAttribute(String k) {
+						if(k.equals(TokenManager.DEFAULT_STORE_KEY_NAME)) {
+							return res[0];
+						}
+						return null;
+					}
+				};
+			}
+		};
+		
+		HttpServletResponse resp = new HttpServletResponseMock();
+		
+		try {
+			filter.doFilter(req, resp, getTestChain());
+		} catch(BlockDetectionException e) {
+			// ok
+		} catch(ForwardDetectionException e) {
+			throw e;
+		} catch(Exception e) {
+			throw new RuntimeException(e);
+		}
+		
+		final String token = res[0];
+		
+		HttpServletRequest req2 = new HttpServletRequestMock() {
+			@Override
+			public String getMethod() {
+				return "post";
+			}
+			@Override
+			public String getRequestURI() {
+				return "/basepath/aaa";
+			}
+			@Override
+			public String getContextPath() {
+				return "/basepath";
+			}
+			@Override
+			public String getParameter(String k) {
+				if(k.equals(TokenManager.DEFAULT_REQUEST_KEY_NAME)) {
+					return token;
+				}
+				return null;
+			}
+			@Override
+			public HttpSession getSession(boolean create) {
+				return new HttpSessionMock() {
+					@Override
+					public void setAttribute(String k, Object v) {
+						if(k.equals(TokenManager.DEFAULT_STORE_KEY_NAME)) {
+							res[0] = (String)v;
+						}
+					}
+					@Override
+					public Object getAttribute(String k) {
+						if(k.equals(TokenManager.DEFAULT_STORE_KEY_NAME)) {
+							return res[0];
+						}
+						return null;
+					}
+				};
+			}
+		};
+		
+		try {
+			filter.doFilter(req2, resp, getTestChain());
+		} catch(BlockDetectionException e) {
+			throw e;
+		} catch(ForwardDetectionException e) {
+			// ok
+		} catch(Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
 
 	
 }
