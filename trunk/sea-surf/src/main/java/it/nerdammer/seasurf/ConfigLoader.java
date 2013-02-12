@@ -27,7 +27,7 @@ import org.xml.sax.SAXException;
 
 class ConfigLoader {
 	
-	protected String configFileName = "META-INF/sea-surf-config.xml";
+	protected String configFileName = "sea-surf-config.xml";
 	protected String xmlSchemaFileName = "META-INF/sea-surf-config_1_0.xsd";
 	
 	protected Logger logger = Logger.getLogger(getClass());
