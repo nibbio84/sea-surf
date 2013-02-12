@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sea-surf-config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://www.nerdammer.it/sea-surf-config_1_0"
+	xsi:schemaLocation="http://www.nerdammer.it/sea-surf-config_1_0 /Users/nicolaferraro/Workspaces/CSRF/sea-surf/src/main/resources/META-INF/sea-surf-config_1_0.xsd">
+
+	<referer-constraints>
+		<referer-constraint>
+			<on-missing-referer>BLOCK</on-missing-referer>
+			<include-origin>
+				<page>http://www.google.*</page>
+				<page>https://www.google.*</page>
+			</include-origin>
+
+			<include>
+				<request-type>
+					<pattern>/action</pattern>
+				</request-type>
+			</include>
+		</referer-constraint>
+		
+		<referer-constraint>
+			<on-missing-referer>ALLOW</on-missing-referer>
+			<include-origin>
+				<domain>www.nerdammer.it</domain>
+			</include-origin>
+
+			<include>
+				<request-type>
+					<pattern>/azion*</pattern>
+					<methods>
+						<method>POST</method>
+					</methods>
+				</request-type>
+			</include>
+		</referer-constraint>
+	</referer-constraints>
+
+
+</sea-surf-config>
