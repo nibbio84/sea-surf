@@ -3,7 +3,7 @@
 
   <groupId>it.nerdammer</groupId>
   <artifactId>sea-surf</artifactId>
-  <version>1.0.0</version>
+  <version>1.0.1-SNAPSHOT</version>
   <packaging>jar</packaging>
 
 	<name>SeaSurf</name>
@@ -18,9 +18,9 @@
 	</licenses>
 	
 	<scm>
-		<connection>scm:svn:http://sea-surf.googlecode.com/svn/tags/sea-surf-1.0.0</connection>
-		<developerConnection>scm:svn:https://sea-surf.googlecode.com/svn/tags/sea-surf-1.0.0</developerConnection>
-		<url>http://sea-surf.googlecode.com/svn/tags/sea-surf-1.0.0</url>
+		<connection>scm:svn:http://sea-surf.googlecode.com/svn/trunk/sea-surf/</connection>
+		<developerConnection>scm:svn:https://sea-surf.googlecode.com/svn/trunk/sea-surf/</developerConnection>
+		<url>http://sea-surf.googlecode.com/svn/trunk/sea-surf/</url>
 	</scm>
 	
 	<developers>
