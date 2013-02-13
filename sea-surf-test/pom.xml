@@ -32,7 +32,7 @@
     <dependency>
       <groupId>it.nerdammer</groupId>
       <artifactId>sea-surf</artifactId>
-      <version>0.0.1-SNAPSHOT</version>
+      <version>1.0.1</version>
     </dependency>
     
   </dependencies>
