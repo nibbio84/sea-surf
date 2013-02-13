@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sea-surf-config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://www.nerdammer.it/sea-surf-config_1_0"
+	xsi:schemaLocation="http://www.nerdammer.it/sea-surf-config_1_0 http://sea-surf.googlecode.com/files/sea-surf-config_1_0.xsd">
+	
+    <referer-constraints>
+		<referer-constraint>
+		    
+		    <on-missing-referer>BLOCK</on-missing-referer>
+		    
+		    <include>
+		        <request-type>
+		            <pattern>/*</pattern>
+		            <methods>
+		                <method>POST</method>
+		                <method>PUT</method>
+		            </methods>
+		        </request-type>
+		    </include>
+		    
+		    <exclude>
+		        <request-type>
+					<pattern>/myPage</pattern>
+		    	</request-type>
+		    </exclude>
+		    
+		    <include-origin>
+		        <domain>www.mydomain.*</domain>
+		        <page>http://www2.aaa.it/page</page>
+		    </include-origin>
+		    
+		</referer-constraint>        
+    </referer-constraints>
+    
+    <security-token-constraints>
+        <security-token-constraint>
+            <include>
+                <request-type>
+                    <pattern>/page2.jsp</pattern>
+                </request-type>
+            </include>
+        </security-token-constraint>
+    </security-token-constraints>
+        
+    <preferences>
+        <token-storage>SESSION</token-storage>
+        
+    </preferences>
+</sea-surf-config>
